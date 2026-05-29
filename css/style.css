@@ -5,8 +5,15 @@
     font-family:Arial,sans-serif;
 }
 
+/* FULL PAGE BACKGROUND */
+
 body{
-    background:#f5f7fb;
+    background:linear-gradient(
+        180deg,
+        rgb(255, 140, 0),
+        rgb(255, 185, 0)
+    );
+    min-height:100vh;
 }
 
 /* SIDEBAR */
@@ -17,32 +24,42 @@ body{
     position:fixed;
     left:0;
     top:0;
-    background:linear-gradient(180deg,#ff6f61,#ff9478);
+
+    background:linear-gradient(
+        180deg,
+        rgb(0, 145, 255),
+        rgb(0, 200, 255)
+    );
+
     color:white;
     padding:20px;
     overflow-y:auto;
-    box-shadow:4px 0 12px rgba(0,0,0,0.1);
+
+    box-shadow:4px 0 15px rgba(0,0,0,0.15);
 }
 
 .sidebar h2{
-    font-size:22px;
-    margin-bottom:30px;
+    font-size:24px;
+    margin-bottom:35px;
     line-height:1.5;
+    text-align:center;
+    font-weight:bold;
 }
 
 .sidebar a{
     display:block;
     color:white;
     text-decoration:none;
-    padding:14px;
-    margin-bottom:10px;
-    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    border-radius:12px;
     transition:0.3s;
     font-weight:bold;
+    font-size:15px;
 }
 
 .sidebar a:hover{
-    background:rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.25);
     transform:translateX(5px);
 }
 
@@ -56,16 +73,24 @@ body{
 /* TOPBAR */
 
 .topbar{
-    background:linear-gradient(90deg,#ff6f61,#ff9478);
+
+    background:linear-gradient(
+        90deg,
+        rgb(255, 140, 0),
+        rgb(255, 185, 0)
+    );
+
     color:white;
-    padding:20px;
-    border-radius:15px;
+    padding:22px;
+    border-radius:18px;
     margin-bottom:25px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
 }
 
 .topbar h1{
-    font-size:28px;
+    font-size:30px;
+    font-weight:bold;
 }
 
 /* DASHBOARD CARDS */
@@ -73,46 +98,50 @@ body{
 .cards{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:20px;
+    gap:22px;
 }
 
 .card{
     background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:28px;
+    border-radius:18px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+
     transition:0.3s;
 }
 
 .card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-6px);
 }
 
 .card h3{
-    color:#555;
+    color:#666;
     margin-bottom:15px;
     font-size:18px;
 }
 
 .card p{
-    font-size:30px;
+    font-size:32px;
     font-weight:bold;
-    color:#ff6f61;
+
+    color:rgb(255, 140, 0);
 }
 
 /* FORM CONTAINER */
 
 .form-container{
     background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:28px;
+    border-radius:18px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
 }
 
 /* FORM GROUP */
 
 .form-group{
-    margin-bottom:18px;
+    margin-bottom:20px;
 }
 
 .form-group label{
@@ -125,38 +154,82 @@ body{
 .form-group input,
 .form-group select,
 .form-group textarea{
+
     width:100%;
-    padding:12px;
-    border:1px solid #ddd;
+    padding:13px;
+
+    border:1px solid #ccc;
+
     border-radius:10px;
+
     outline:none;
+
     transition:0.3s;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
-    border-color:#ff6f61;
-    box-shadow:0 0 8px rgba(255,111,97,0.2);
+
+    border-color:rgb(255, 140, 0);
+
+    box-shadow:0 0 10px rgba(255,140,0,0.25);
 }
 
 /* BUTTON */
 
 button{
-    background:linear-gradient(90deg,#ff6f61,#ff9478);
+
+    background:linear-gradient(
+        90deg,
+        rgb(255, 140, 0),
+        rgb(255, 185, 0)
+    );
+
     color:white;
+
     border:none;
+
     padding:14px 24px;
-    border-radius:10px;
+
+    border-radius:12px;
+
     cursor:pointer;
+
     font-size:16px;
+
     font-weight:bold;
+
     transition:0.3s;
 }
 
 button:hover{
-    opacity:0.9;
-    transform:translateY(-2px);
+
+    transform:translateY(-3px);
+
+    opacity:0.95;
+}
+
+/* TABLE DESIGN */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+table th{
+    background:rgb(0,145,255);
+    color:white;
+    padding:14px;
+    text-align:left;
+}
+
+table td{
+    padding:12px;
+    border-bottom:1px solid #eee;
 }
 
 /* MOBILE RESPONSIVE */
@@ -171,6 +244,7 @@ button:hover{
 
     .main{
         margin-left:0;
+        padding:15px;
     }
 
     .cards{
