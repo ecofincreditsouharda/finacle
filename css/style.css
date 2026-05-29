@@ -8,12 +8,7 @@
 /* BODY */
 
 body{
-    background:linear-gradient(
-        180deg,
-        rgb(255,140,0),
-        rgb(255,185,0)
-    );
-
+    background:#f4f7fb;
     min-height:100vh;
 }
 
@@ -40,10 +35,10 @@ body{
 
     overflow-y:auto;
 
-    box-shadow:4px 0 18px rgba(0,0,0,0.15);
+    box-shadow:4px 0 18px rgba(0,0,0,0.12);
 }
 
-/* LOGO / TITLE */
+/* LOGO TITLE */
 
 .sidebar h2{
 
@@ -125,13 +120,9 @@ body{
 
 .topbar{
 
-    background:linear-gradient(
-        90deg,
-        rgb(0,145,255),
-        rgb(0,200,255)
-    );
+    background:white;
 
-    color:white;
+    color:#222;
 
     padding:22px;
 
@@ -139,7 +130,7 @@ body{
 
     margin-bottom:25px;
 
-    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
 .topbar h1{
@@ -162,19 +153,13 @@ body{
 
 .card{
 
-    background:linear-gradient(
-        180deg,
-        rgb(255,140,0),
-        rgb(255,185,0)
-    );
-
-    color:white;
+    background:white;
 
     padding:28px;
 
     border-radius:20px;
 
-    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
 
     transition:0.3s;
 }
@@ -191,6 +176,8 @@ body{
     font-size:20px;
 
     font-weight:bold;
+
+    color:#444;
 }
 
 .card p{
@@ -198,25 +185,21 @@ body{
     font-size:34px;
 
     font-weight:bold;
+
+    color:rgb(0,145,255);
 }
 
 /* FORM CONTAINER */
 
 .form-container{
 
-    background:linear-gradient(
-        180deg,
-        rgb(255,140,0),
-        rgb(255,185,0)
-    );
+    background:white;
 
     padding:28px;
 
     border-radius:20px;
 
-    color:white;
-
-    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
 /* FORM GROUP */
@@ -235,6 +218,8 @@ body{
     font-weight:bold;
 
     font-size:15px;
+
+    color:#444;
 }
 
 .form-group input,
@@ -245,13 +230,24 @@ body{
 
     padding:13px;
 
-    border:none;
+    border:1px solid #ddd;
 
     border-radius:12px;
 
     outline:none;
 
     font-size:15px;
+
+    transition:0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:rgb(0,145,255);
+
+    box-shadow:0 0 10px rgba(0,145,255,0.2);
 }
 
 /* BUTTON */
