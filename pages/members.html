@@ -1,1 +1,111 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+    <title>Members</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <h2>ECOFIN BANK</h2>
+
+        <a href="../dashboard.html">Dashboard</a>
+        <a href="members.html">Members</a>
+
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+
+            <h1>Member Registration</h1>
+
+        </div>
+
+        <div class="form-container">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName">
+            </div>
+
+            <div class="form-group">
+                <label>Father/Husband Name</label>
+                <input type="text" id="fatherName">
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+
+                <select id="gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="dob">
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" id="mobile">
+            </div>
+
+            <div class="form-group">
+                <label>Aadhaar Number</label>
+                <input type="text" id="aadhaar">
+            </div>
+
+            <div class="form-group">
+                <label>PAN Number</label>
+                <input type="text" id="pan">
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <textarea id="address"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Photo Upload</label>
+                <input type="file" id="photo">
+            </div>
+
+            <div class="form-group">
+                <label>Aadhaar Front Upload</label>
+                <input type="file" id="aadhaarFront">
+            </div>
+
+            <div class="form-group">
+                <label>Aadhaar Back Upload</label>
+                <input type="file" id="aadhaarBack">
+            </div>
+
+            <div class="form-group">
+                <label>PAN Card Upload</label>
+                <input type="file" id="panCard">
+            </div>
+
+            <button onclick="saveMember()">
+                Save Member
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/members.js"></script>
+
+</body>
+
+</html>
