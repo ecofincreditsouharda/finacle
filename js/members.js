@@ -13,24 +13,31 @@ async function saveMember() {
             pan: document.getElementById("pan").value,
             address: document.getElementById("address").value,
 
+            photoURL: "",
             aadhaarFrontURL: "",
             aadhaarBackURL: "",
-            panCardURL: "",
-            photoURL: ""
+            panCardURL: ""
 
         };
 
-        console.log(memberData);
+        const queryParams = new URLSearchParams({
+
+            action: "saveMember",
+
+            data: JSON.stringify(memberData)
+
+        });
 
         const response = await fetch(
-            `${API_BASE_URL}?action=saveMember`,
+
+            `${API_BASE_URL}?${queryParams}`,
+
             {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(memberData)
+
+                method: "GET"
+
             }
+
         );
 
         const result = await response.json();
@@ -40,8 +47,13 @@ async function saveMember() {
         if(result.status === "success") {
 
             alert(
+
                 "Member Saved Successfully\n\n" +
-                "Member Number: " + result.memberNumber
+
+                "Member Number: " +
+
+                result.memberNumber
+
             );
 
             location.reload();
