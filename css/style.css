@@ -8,7 +8,7 @@
 /* BODY */
 
 body{
-    background:#f4f7fb;
+    background:#f4f7fb !important;
     min-height:100vh;
 }
 
@@ -114,13 +114,17 @@ body{
     margin-left:270px;
 
     padding:25px;
+
+    background:#f4f7fb !important;
+
+    min-height:100vh;
 }
 
 /* TOPBAR */
 
 .topbar{
 
-    background:white;
+    background:white !important;
 
     color:#222;
 
@@ -138,6 +142,8 @@ body{
     font-size:34px;
 
     font-weight:bold;
+
+    color:#222;
 }
 
 /* DASHBOARD CARDS */
@@ -153,7 +159,7 @@ body{
 
 .card{
 
-    background:white;
+    background:white !important;
 
     padding:28px;
 
@@ -193,7 +199,7 @@ body{
 
 .form-container{
 
-    background:white;
+    background:white !important;
 
     padding:28px;
 
