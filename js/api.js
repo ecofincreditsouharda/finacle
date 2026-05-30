@@ -1,18 +1,32 @@
 // =====================================
-// API GET REQUEST
+// ECOFIN API CONFIG HELPERS
 // =====================================
 
-async function apiGet(action) {
+async function apiGet(action, params = {}) {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}?action=${action}`);
+        const query =
+            new URLSearchParams({
+                action,
+                ...params
+            });
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}?${query}`
+            );
 
         return await response.json();
 
-    } catch(error) {
+    } catch (error) {
 
-        console.error("GET API ERROR:", error);
+        console.error(error);
+
+        return {
+            status: "error",
+            message: error.message
+        };
 
     }
 
@@ -20,30 +34,42 @@ async function apiGet(action) {
 
 
 // =====================================
-// API POST REQUEST
+// API POST
 // =====================================
 
-async function apiPost(action, data) {
+async function apiPost(action, data = {}) {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}?action=${action}`, {
+        const response =
+            await fetch(API_BASE_URL, {
 
-            method: "POST",
+                method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
 
-            body: JSON.stringify(data)
+                body: JSON.stringify({
 
-        });
+                    action: action,
+                    data: data
+
+                })
+
+            });
 
         return await response.json();
 
-    } catch(error) {
+    } catch (error) {
 
-        console.error("POST API ERROR:", error);
+        console.error(error);
+
+        return {
+            status: "error",
+            message: error.message
+        };
 
     }
 
