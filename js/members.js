@@ -433,3 +433,75 @@ window.onload = async function(){
     }
 
 }
+
+async function searchMember() {
+
+    const memberNumber =
+        document.getElementById(
+            "searchMemberNumber"
+        ).value;
+
+    if (!memberNumber) {
+
+        alert("Enter Member Number");
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+
+            `${API_BASE_URL}?action=searchMember&memberNumber=${memberNumber}`
+
+        );
+
+        const result = await response.json();
+
+        if (result.status !== "success") {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        const m = result.member;
+
+        document.getElementById("memberNumber").value = m.memberNumber || "";
+        document.getElementById("fullName").value = m.fullName || "";
+        document.getElementById("fatherName").value = m.fatherName || "";
+        document.getElementById("gender").value = m.gender || "";
+        document.getElementById("dob").value = m.dob || "";
+        document.getElementById("age").value = m.age || "";
+        document.getElementById("mobile").value = m.mobile || "";
+        document.getElementById("alternateMobile").value = m.alternateMobile || "";
+        document.getElementById("email").value = m.email || "";
+        document.getElementById("aadhaar").value = m.aadhaar || "";
+        document.getElementById("pan").value = m.pan || "";
+        document.getElementById("occupation").value = m.occupation || "";
+        document.getElementById("monthlyIncome").value = m.monthlyIncome || "";
+        document.getElementById("address").value = m.address || "";
+        document.getElementById("city").value = m.city || "";
+        document.getElementById("district").value = m.district || "";
+        document.getElementById("state").value = m.state || "";
+        document.getElementById("pinCode").value = m.pinCode || "";
+        document.getElementById("nomineeName").value = m.nomineeName || "";
+        document.getElementById("nomineeRelation").value = m.nomineeRelation || "";
+        document.getElementById("nomineeMobile").value = m.nomineeMobile || "";
+        document.getElementById("status").value = m.status || "";
+
+        document.getElementById(
+            "saveBtn"
+        ).innerHTML = "Update Member";
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Error Loading Member");
+
+    }
+
+}
