@@ -31,7 +31,7 @@ window.onload = async function () {
 
 
 /* ==========================
-   SAVE MEMBER
+   SAVE / UPDATE MEMBER
 ========================== */
 
 async function saveMember() {
@@ -40,35 +40,71 @@ async function saveMember() {
 
         const memberData = {
 
-            memberNumber: document.getElementById("memberNumber").value,
+            memberNumber:
+                document.getElementById("memberNumber").value,
 
-            fullName: document.getElementById("fullName").value,
-            fatherName: document.getElementById("fatherName").value,
-            gender: document.getElementById("gender").value,
-            dob: document.getElementById("dob").value,
-            age: document.getElementById("age").value,
+            fullName:
+                document.getElementById("fullName").value,
 
-            mobile: document.getElementById("mobile").value,
-            alternateMobile: document.getElementById("alternateMobile").value,
-            email: document.getElementById("email").value,
+            fatherName:
+                document.getElementById("fatherName").value,
 
-            aadhaar: document.getElementById("aadhaar").value,
-            pan: document.getElementById("pan").value,
+            gender:
+                document.getElementById("gender").value,
 
-            occupation: document.getElementById("occupation").value,
-            monthlyIncome: document.getElementById("monthlyIncome").value,
+            dob:
+                document.getElementById("dob").value,
 
-            address: document.getElementById("address").value,
-            city: document.getElementById("city").value,
-            district: document.getElementById("district").value,
-            state: document.getElementById("state").value,
-            pinCode: document.getElementById("pinCode").value,
+            age:
+                document.getElementById("age").value,
 
-            nomineeName: document.getElementById("nomineeName").value,
-            nomineeRelation: document.getElementById("nomineeRelation").value,
-            nomineeMobile: document.getElementById("nomineeMobile").value,
+            mobile:
+                document.getElementById("mobile").value,
 
-            status: document.getElementById("status").value,
+            alternateMobile:
+                document.getElementById("alternateMobile").value,
+
+            email:
+                document.getElementById("email").value,
+
+            aadhaar:
+                document.getElementById("aadhaar").value,
+
+            pan:
+                document.getElementById("pan").value,
+
+            occupation:
+                document.getElementById("occupation").value,
+
+            monthlyIncome:
+                document.getElementById("monthlyIncome").value,
+
+            address:
+                document.getElementById("address").value,
+
+            city:
+                document.getElementById("city").value,
+
+            district:
+                document.getElementById("district").value,
+
+            state:
+                document.getElementById("state").value,
+
+            pinCode:
+                document.getElementById("pinCode").value,
+
+            nomineeName:
+                document.getElementById("nomineeName").value,
+
+            nomineeRelation:
+                document.getElementById("nomineeRelation").value,
+
+            nomineeMobile:
+                document.getElementById("nomineeMobile").value,
+
+            status:
+                document.getElementById("status").value,
 
             photoURL: "",
             aadhaarFrontURL: "",
@@ -80,9 +116,14 @@ async function saveMember() {
 
         showLoading();
 
+        const action =
+            isUpdateMode
+                ? "updateMember"
+                : "saveMember";
+
         const queryParams = new URLSearchParams({
 
-            action: "saveMember",
+            action: action,
             data: JSON.stringify(memberData)
 
         });
@@ -97,7 +138,20 @@ async function saveMember() {
 
         if (result.status === "success") {
 
-            showSuccessPopup(result.memberNumber);
+            if (isUpdateMode) {
+
+                alert("Member Updated Successfully");
+
+            } else {
+
+                alert(
+                    "Member Saved Successfully\n\nMember Number : " +
+                    result.memberNumber
+                );
+
+            }
+
+            location.reload();
 
         } else {
 
@@ -125,7 +179,9 @@ async function saveMember() {
 async function searchMember() {
 
     const memberNumber =
-        document.getElementById("searchMemberNumber").value.trim();
+        document.getElementById("searchMemberNumber")
+        .value
+        .trim();
 
     if (!memberNumber) {
 
@@ -164,8 +220,6 @@ async function searchMember() {
 
         document.getElementById("gender").value =
             m.gender || "";
-
-        /* FIX DATE FORMAT */
 
         if (m.dob) {
 
@@ -273,27 +327,12 @@ function showLoadedMessage(memberNumber) {
 
     setTimeout(() => {
 
-        const el = document.getElementById("loadedMsg");
+        const el =
+            document.getElementById("loadedMsg");
 
         if (el) el.remove();
 
     }, 3000);
-
-}
-
-
-/* ==========================
-   SUCCESS POPUP
-========================== */
-
-function showSuccessPopup(memberNumber) {
-
-    alert(
-        "Member Saved Successfully\n\nMember Number : " +
-        memberNumber
-    );
-
-    location.reload();
 
 }
 
@@ -332,7 +371,7 @@ function showLoading() {
             align-items:center;
             z-index:99999;
         ">
-            <h2>Saving Member...</h2>
+            <h2>Please Wait...</h2>
         </div>
         `
 
