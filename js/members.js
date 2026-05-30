@@ -140,18 +140,19 @@ async function saveMember() {
 
             if (isUpdateMode) {
 
-                alert("Member Updated Successfully");
+                showSuccessPopup(
+                    "Member Updated Successfully",
+                    memberData.memberNumber
+                );
 
             } else {
 
-                alert(
-                    "Member Saved Successfully\n\nMember Number : " +
+                showSuccessPopup(
+                    "Member Saved Successfully",
                     result.memberNumber
                 );
 
             }
-
-            location.reload();
 
         } else {
 
@@ -185,7 +186,7 @@ async function searchMember() {
 
     if (!memberNumber) {
 
-        alert("Enter Member Number");
+        showErrorPopup("Enter Member Number");
 
         return;
 
@@ -201,7 +202,7 @@ async function searchMember() {
 
         if (result.status !== "success") {
 
-            alert(result.message);
+            showErrorPopup(result.message);
 
             return;
 
@@ -209,17 +210,10 @@ async function searchMember() {
 
         const m = result.member;
 
-        document.getElementById("memberNumber").value =
-            m.memberNumber || "";
-
-        document.getElementById("fullName").value =
-            m.fullName || "";
-
-        document.getElementById("fatherName").value =
-            m.fatherName || "";
-
-        document.getElementById("gender").value =
-            m.gender || "";
+        document.getElementById("memberNumber").value = m.memberNumber || "";
+        document.getElementById("fullName").value = m.fullName || "";
+        document.getElementById("fatherName").value = m.fatherName || "";
+        document.getElementById("gender").value = m.gender || "";
 
         if (m.dob) {
 
@@ -228,56 +222,23 @@ async function searchMember() {
 
         }
 
-        document.getElementById("age").value =
-            m.age || "";
-
-        document.getElementById("mobile").value =
-            m.mobile || "";
-
-        document.getElementById("alternateMobile").value =
-            m.alternateMobile || "";
-
-        document.getElementById("email").value =
-            m.email || "";
-
-        document.getElementById("aadhaar").value =
-            m.aadhaar || "";
-
-        document.getElementById("pan").value =
-            m.pan || "";
-
-        document.getElementById("occupation").value =
-            m.occupation || "";
-
-        document.getElementById("monthlyIncome").value =
-            m.monthlyIncome || "";
-
-        document.getElementById("address").value =
-            m.address || "";
-
-        document.getElementById("city").value =
-            m.city || "";
-
-        document.getElementById("district").value =
-            m.district || "";
-
-        document.getElementById("state").value =
-            m.state || "";
-
-        document.getElementById("pinCode").value =
-            m.pinCode || "";
-
-        document.getElementById("nomineeName").value =
-            m.nomineeName || "";
-
-        document.getElementById("nomineeRelation").value =
-            m.nomineeRelation || "";
-
-        document.getElementById("nomineeMobile").value =
-            m.nomineeMobile || "";
-
-        document.getElementById("status").value =
-            m.status || "Active";
+        document.getElementById("age").value = m.age || "";
+        document.getElementById("mobile").value = m.mobile || "";
+        document.getElementById("alternateMobile").value = m.alternateMobile || "";
+        document.getElementById("email").value = m.email || "";
+        document.getElementById("aadhaar").value = m.aadhaar || "";
+        document.getElementById("pan").value = m.pan || "";
+        document.getElementById("occupation").value = m.occupation || "";
+        document.getElementById("monthlyIncome").value = m.monthlyIncome || "";
+        document.getElementById("address").value = m.address || "";
+        document.getElementById("city").value = m.city || "";
+        document.getElementById("district").value = m.district || "";
+        document.getElementById("state").value = m.state || "";
+        document.getElementById("pinCode").value = m.pinCode || "";
+        document.getElementById("nomineeName").value = m.nomineeName || "";
+        document.getElementById("nomineeRelation").value = m.nomineeRelation || "";
+        document.getElementById("nomineeMobile").value = m.nomineeMobile || "";
+        document.getElementById("status").value = m.status || "Active";
 
         document.getElementById("saveBtn").innerHTML =
             "Update Member";
@@ -290,7 +251,7 @@ async function searchMember() {
 
         console.error(error);
 
-        alert("Error Loading Member");
+        showErrorPopup("Error Loading Member");
 
     }
 
@@ -298,15 +259,13 @@ async function searchMember() {
 
 
 /* ==========================
-   MEMBER LOADED MESSAGE
+   MEMBER LOADED
 ========================== */
 
 function showLoadedMessage(memberNumber) {
 
     document.body.insertAdjacentHTML(
-
         "beforeend",
-
         `
         <div id="loadedMsg" style="
             position:fixed;
@@ -319,10 +278,9 @@ function showLoadedMessage(memberNumber) {
             z-index:99999;
             font-weight:bold;
         ">
-            Member Loaded : ${memberNumber}
+            ✓ Member Loaded : ${memberNumber}
         </div>
         `
-
     );
 
     setTimeout(() => {
@@ -338,12 +296,106 @@ function showLoadedMessage(memberNumber) {
 
 
 /* ==========================
+   SUCCESS POPUP
+========================== */
+
+function showSuccessPopup(message, memberNumber) {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="successPopup" style="
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,.4);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index:999999;
+        ">
+            <div style="
+                background:#fff;
+                width:420px;
+                padding:35px;
+                border-radius:20px;
+                text-align:center;
+                box-shadow:0 15px 40px rgba(0,0,0,.25);
+            ">
+
+                <div style="
+                    font-size:70px;
+                    color:#00b894;
+                ">
+                    ✔
+                </div>
+
+                <h2>${message}</h2>
+
+                <p style="margin-top:10px;">
+                    Member Number
+                </p>
+
+                <h1 style="
+                    color:#0984e3;
+                    margin:15px 0;
+                ">
+                    ${memberNumber}
+                </h1>
+
+                <button onclick="closeSuccessPopup()">
+                    OK
+                </button>
+
+            </div>
+        </div>
+        `
+    );
+
+}
+
+function closeSuccessPopup() {
+
+    location.reload();
+
+}
+
+
+/* ==========================
    ERROR POPUP
 ========================== */
 
 function showErrorPopup(message) {
 
-    alert(message);
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="errorPopup" style="
+            position:fixed;
+            top:20px;
+            right:20px;
+            background:#e74c3c;
+            color:white;
+            padding:15px 25px;
+            border-radius:12px;
+            z-index:99999;
+            font-weight:bold;
+        ">
+            ✖ ${message}
+        </div>
+        `
+    );
+
+    setTimeout(() => {
+
+        const popup =
+            document.getElementById("errorPopup");
+
+        if (popup) popup.remove();
+
+    }, 3000);
 
 }
 
@@ -355,9 +407,7 @@ function showErrorPopup(message) {
 function showLoading() {
 
     document.body.insertAdjacentHTML(
-
         "beforeend",
-
         `
         <div id="loadingPopup" style="
             position:fixed;
@@ -365,16 +415,22 @@ function showLoading() {
             left:0;
             width:100%;
             height:100%;
-            background:rgba(255,255,255,.7);
+            background:rgba(255,255,255,.75);
             display:flex;
             justify-content:center;
             align-items:center;
-            z-index:99999;
+            z-index:999999;
         ">
-            <h2>Please Wait...</h2>
+            <div style="
+                background:white;
+                padding:30px;
+                border-radius:16px;
+                box-shadow:0 10px 25px rgba(0,0,0,.15);
+            ">
+                <h2>Please Wait...</h2>
+            </div>
         </div>
         `
-
     );
 
 }
