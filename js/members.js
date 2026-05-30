@@ -409,3 +409,27 @@ function hideLoading(){
     }
 
 }
+window.onload = async function(){
+
+    try{
+
+        const response = await fetch(
+            `${API_BASE_URL}?action=getNextMemberNumber`
+        );
+
+        const result = await response.json();
+
+        if(result.status === "success"){
+
+            document.getElementById("memberNumber").value =
+                result.memberNumber;
+
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
