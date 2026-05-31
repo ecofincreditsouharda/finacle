@@ -1,9 +1,5 @@
 let isUpdateMode = false;
 
-const DRIVE_UPLOAD_URL =
-"https://script.google.com/macros/s/AKfycbzcz5gkMvDofJMdHuQMp23s6GTw7LKIVyJrtoD2Gh6eXBl7tmJEEQVOMyJOOKwWmFfE/exec";
-
-
 // =====================================
 // LOAD MEMBER NUMBER
 // =====================================
@@ -39,102 +35,6 @@ window.onload = async function () {
 
 
 // =====================================
-// FILE TO BASE64
-// =====================================
-
-function fileToBase64(file) {
-
-    return new Promise((resolve, reject) => {
-
-        const reader =
-            new FileReader();
-
-        reader.readAsDataURL(file);
-
-        reader.onload = () => {
-
-            resolve(
-                reader.result
-                    .split(",")[1]
-            );
-
-        };
-
-        reader.onerror = reject;
-
-    });
-
-}
-
-
-// =====================================
-// UPLOAD FILE
-// =====================================
-
-async function uploadFile(file, folderId) {
-
-    if (!file) return "";
-
-    try {
-
-        const base64 =
-            await fileToBase64(file);
-
-        const response =
-            await fetch(DRIVE_UPLOAD_URL, {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    action: "uploadFile",
-
-                    data: {
-
-                        folderId: folderId,
-
-                        fileName: file.name,
-
-                        mimeType: file.type,
-
-                        base64: base64
-
-                    }
-
-                })
-
-            });
-
-        const result =
-            await response.json();
-
-        if (
-            result.status === "success"
-        ) {
-
-            return result.url;
-
-        }
-
-        return "";
-
-    } catch (error) {
-
-        console.error(error);
-
-        return "";
-
-    }
-
-}
-
-
-// =====================================
 // SAVE MEMBER
 // =====================================
 
@@ -143,46 +43,6 @@ async function saveMember() {
     try {
 
         showLoading();
-
-        const photoURL =
-            await uploadFile(
-                document
-                    .getElementById("photo")
-                    .files[0],
-                "1H9Y6eP18NlxfkfiAwPrnpx_2cCQBdvSm"
-            );
-
-        const aadhaarFrontURL =
-            await uploadFile(
-                document
-                    .getElementById("aadhaarFront")
-                    .files[0],
-                "1kZYn3WGyCthkNOdTnZdBDiYpBvVevFxM"
-            );
-
-        const aadhaarBackURL =
-            await uploadFile(
-                document
-                    .getElementById("aadhaarBack")
-                    .files[0],
-                "1qTqDr53cSOkCXUUrrSSHzdmeXh8811KQ"
-            );
-
-        const panCardURL =
-            await uploadFile(
-                document
-                    .getElementById("panCard")
-                    .files[0],
-                "1ulZzhrExFgl0EsV5vplES2N0Dj9bS59O"
-            );
-
-        const signatureURL =
-            await uploadFile(
-                document
-                    .getElementById("signature")
-                    .files[0],
-                "1P-ojxPYmcTDCQDYaBcOPtRN59RTp688V"
-            );
 
         const memberData = {
 
@@ -240,6 +100,18 @@ async function saveMember() {
             pinCode:
                 document.getElementById("pinCode").value,
 
+            aadhaarCollected:
+                document.getElementById("aadhaarCollected").value,
+
+            panCollected:
+                document.getElementById("panCollected").value,
+
+            photoCollected:
+                document.getElementById("photoCollected").value,
+
+            signatureCollected:
+                document.getElementById("signatureCollected").value,
+
             nomineeName:
                 document.getElementById("nomineeName").value,
 
@@ -250,22 +122,7 @@ async function saveMember() {
                 document.getElementById("nomineeMobile").value,
 
             status:
-                document.getElementById("status").value,
-
-            photoURL:
-                photoURL,
-
-            aadhaarFrontURL:
-                aadhaarFrontURL,
-
-            aadhaarBackURL:
-                aadhaarBackURL,
-
-            panCardURL:
-                panCardURL,
-
-            signatureURL:
-                signatureURL
+                document.getElementById("status").value
 
         };
 
@@ -287,7 +144,6 @@ async function saveMember() {
                 body: JSON.stringify({
 
                     action: action,
-
                     data: memberData
 
                 })
@@ -299,12 +155,12 @@ async function saveMember() {
 
         hideLoading();
 
-        if (
-            result.status === "success"
-        ) {
+        if (result.status === "success") {
 
             showSuccessPopup(
-                "Member Saved Successfully",
+                isUpdateMode
+                    ? "Member Updated Successfully"
+                    : "Member Saved Successfully",
                 result.memberNumber ||
                 memberData.memberNumber
             );
@@ -340,9 +196,7 @@ async function searchMember() {
 
     const memberNumber =
         document
-            .getElementById(
-                "searchMemberNumber"
-            )
+            .getElementById("searchMemberNumber")
             .value
             .trim();
 
@@ -364,9 +218,7 @@ async function searchMember() {
     const result =
         await response.json();
 
-    if (
-        result.status !== "success"
-    ) {
+    if (result.status !== "success") {
 
         showErrorPopup(
             result.message
@@ -376,8 +228,7 @@ async function searchMember() {
 
     }
 
-    const m =
-        result.member;
+    const m = result.member;
 
     document.getElementById("memberNumber").value = m.memberNumber || "";
     document.getElementById("fullName").value = m.fullName || "";
@@ -395,205 +246,61 @@ async function searchMember() {
     document.getElementById("district").value = m.district || "";
     document.getElementById("state").value = m.state || "";
     document.getElementById("pinCode").value = m.pinCode || "";
+
+    document.getElementById("aadhaarCollected").value = m.aadhaarCollected || "No";
+    document.getElementById("panCollected").value = m.panCollected || "No";
+    document.getElementById("photoCollected").value = m.photoCollected || "No";
+    document.getElementById("signatureCollected").value = m.signatureCollected || "No";
+
     document.getElementById("nomineeName").value = m.nomineeName || "";
     document.getElementById("nomineeRelation").value = m.nomineeRelation || "";
     document.getElementById("nomineeMobile").value = m.nomineeMobile || "";
-    document.getElementById("status").value = m.status || "Active";
+
+    document.getElementById("status").value =
+        m.status || "Active";
 
     isUpdateMode = true;
 
     document.getElementById("saveBtn").innerHTML =
         "Update Member";
 
-    showLoadedMessage(
-        memberNumber
-    );
+    showLoadedMessage(memberNumber);
 
 }
+
+
 // =====================================
-// MEMBER LOADED MESSAGE
+// POPUPS
 // =====================================
 
 function showLoadedMessage(memberNumber) {
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="loadedMsg" style="
-            position:fixed;
-            top:20px;
-            right:20px;
-            background:#00b894;
-            color:white;
-            padding:15px 25px;
-            border-radius:12px;
-            z-index:99999;
-            font-weight:bold;
-        ">
-            ✓ Member Loaded : ${memberNumber}
-        </div>
-        `
-    );
-
-    setTimeout(() => {
-
-        const el =
-            document.getElementById("loadedMsg");
-
-        if (el) el.remove();
-
-    }, 3000);
+    alert("Member Loaded : " + memberNumber);
 
 }
-
-
-// =====================================
-// SUCCESS POPUP
-// =====================================
 
 function showSuccessPopup(message, memberNumber) {
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="successPopup" style="
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,.4);
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            z-index:999999;
-        ">
-            <div style="
-                background:#fff;
-                width:420px;
-                padding:35px;
-                border-radius:20px;
-                text-align:center;
-            ">
-                <h2>${message}</h2>
-
-                <h1 style="
-                    color:#0984e3;
-                    margin:15px 0;
-                ">
-                    ${memberNumber}
-                </h1>
-
-                <button onclick="closeSuccessPopup()">
-                    OK
-                </button>
-
-            </div>
-        </div>
-        `
-    );
-
-}
-
-function closeSuccessPopup() {
+    alert(message + "\n\n" + memberNumber);
 
     location.reload();
 
 }
 
-
-// =====================================
-// ERROR POPUP
-// =====================================
-
 function showErrorPopup(message) {
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="errorPopup" style="
-            position:fixed;
-            top:20px;
-            right:20px;
-            background:#e74c3c;
-            color:white;
-            padding:15px 25px;
-            border-radius:12px;
-            z-index:99999;
-            font-weight:bold;
-        ">
-            ✖ ${message}
-        </div>
-        `
-    );
-
-    setTimeout(() => {
-
-        const popup =
-            document.getElementById("errorPopup");
-
-        if (popup) popup.remove();
-
-    }, 3000);
+    alert(message);
 
 }
 
-
-// =====================================
-// LOADING
-// =====================================
-
 function showLoading() {
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="loadingPopup" style="
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(255,255,255,.8);
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            z-index:999999;
-        ">
-            <div style="
-                background:white;
-                padding:30px;
-                border-radius:16px;
-            ">
-                <h2>Please Wait...</h2>
-            </div>
-        </div>
-        `
-    );
+    console.log("Loading...");
 
 }
 
 function hideLoading() {
 
-    const popup =
-        document.getElementById("loadingPopup");
-
-    if (popup) {
-
-        popup.remove();
-
-    }
+    console.log("Done");
 
 }
-
-
-// =====================================
-// EXISTING POPUP FUNCTIONS
-// KEEP YOUR OLD:
-// showLoadedMessage()
-// showSuccessPopup()
-// closeSuccessPopup()
-// showErrorPopup()
-// showLoading()
-// hideLoading()
-// =====================================
