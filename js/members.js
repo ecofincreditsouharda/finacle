@@ -1,22 +1,30 @@
 let isUpdateMode = false;
 
-/* ==========================
-   LOAD NEXT MEMBER NUMBER
-========================== */
+const DRIVE_UPLOAD_URL =
+"https://script.google.com/macros/s/AKfycbzcz5gkMvDofJMdHuQMp23s6GTw7LKIVyJrtoD2Gh6eXBl7tmJEEQVOMyJOOKwWmFfE/exec";
+
+
+// =====================================
+// LOAD MEMBER NUMBER
+// =====================================
 
 window.onload = async function () {
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}?action=getNextMemberNumber`
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}?action=getNextMemberNumber`
+            );
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
         if (result.status === "success") {
 
-            document.getElementById("memberNumber").value =
+            document.getElementById(
+                "memberNumber"
+            ).value =
                 result.memberNumber;
 
         }
@@ -30,13 +38,151 @@ window.onload = async function () {
 };
 
 
-/* ==========================
-   SAVE / UPDATE MEMBER
-========================== */
+// =====================================
+// FILE TO BASE64
+// =====================================
+
+function fileToBase64(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader =
+            new FileReader();
+
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+
+            resolve(
+                reader.result
+                    .split(",")[1]
+            );
+
+        };
+
+        reader.onerror = reject;
+
+    });
+
+}
+
+
+// =====================================
+// UPLOAD FILE
+// =====================================
+
+async function uploadFile(file, folderId) {
+
+    if (!file) return "";
+
+    try {
+
+        const base64 =
+            await fileToBase64(file);
+
+        const response =
+            await fetch(DRIVE_UPLOAD_URL, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    action: "uploadFile",
+
+                    data: {
+
+                        folderId: folderId,
+
+                        fileName: file.name,
+
+                        mimeType: file.type,
+
+                        base64: base64
+
+                    }
+
+                })
+
+            });
+
+        const result =
+            await response.json();
+
+        if (
+            result.status === "success"
+        ) {
+
+            return result.url;
+
+        }
+
+        return "";
+
+    } catch (error) {
+
+        console.error(error);
+
+        return "";
+
+    }
+
+}
+
+
+// =====================================
+// SAVE MEMBER
+// =====================================
 
 async function saveMember() {
 
     try {
+
+        showLoading();
+
+        const photoURL =
+            await uploadFile(
+                document
+                    .getElementById("photo")
+                    .files[0],
+                "1H9Y6eP18NlxfkfiAwPrnpx_2cCQBdvSm"
+            );
+
+        const aadhaarFrontURL =
+            await uploadFile(
+                document
+                    .getElementById("aadhaarFront")
+                    .files[0],
+                "1kZYn3WGyCthkNOdTnZdBDiYpBvVevFxM"
+            );
+
+        const aadhaarBackURL =
+            await uploadFile(
+                document
+                    .getElementById("aadhaarBack")
+                    .files[0],
+                "1qTqDr53cSOkCXUUrrSSHzdmeXh8811KQ"
+            );
+
+        const panCardURL =
+            await uploadFile(
+                document
+                    .getElementById("panCard")
+                    .files[0],
+                "1ulZzhrExFgl0EsV5vplES2N0Dj9bS59O"
+            );
+
+        const signatureURL =
+            await uploadFile(
+                document
+                    .getElementById("signature")
+                    .files[0],
+                "1P-ojxPYmcTDCQDYaBcOPtRN59RTp688V"
+            );
 
         const memberData = {
 
@@ -106,57 +252,68 @@ async function saveMember() {
             status:
                 document.getElementById("status").value,
 
-            photoURL: "",
-            aadhaarFrontURL: "",
-            aadhaarBackURL: "",
-            panCardURL: "",
-            signatureURL: ""
+            photoURL:
+                photoURL,
+
+            aadhaarFrontURL:
+                aadhaarFrontURL,
+
+            aadhaarBackURL:
+                aadhaarBackURL,
+
+            panCardURL:
+                panCardURL,
+
+            signatureURL:
+                signatureURL
 
         };
-
-        showLoading();
 
         const action =
             isUpdateMode
                 ? "updateMember"
                 : "saveMember";
 
-        const queryParams = new URLSearchParams({
+        const response =
+            await fetch(API_BASE_URL, {
 
-            action: action,
-            data: JSON.stringify(memberData)
+                method: "POST",
 
-        });
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
 
-        const response = await fetch(
-            `${API_BASE_URL}?${queryParams}`
-        );
+                body: JSON.stringify({
 
-        const result = await response.json();
+                    action: action,
+
+                    data: memberData
+
+                })
+
+            });
+
+        const result =
+            await response.json();
 
         hideLoading();
 
-        if (result.status === "success") {
+        if (
+            result.status === "success"
+        ) {
 
-            if (isUpdateMode) {
-
-                showSuccessPopup(
-                    "Member Updated Successfully",
-                    memberData.memberNumber
-                );
-
-            } else {
-
-                showSuccessPopup(
-                    "Member Saved Successfully",
-                    result.memberNumber
-                );
-
-            }
+            showSuccessPopup(
+                "Member Saved Successfully",
+                result.memberNumber ||
+                memberData.memberNumber
+            );
 
         } else {
 
-            showErrorPopup(result.message);
+            showErrorPopup(
+                result.message
+            );
 
         }
 
@@ -166,284 +323,102 @@ async function saveMember() {
 
         hideLoading();
 
-        showErrorPopup("Error Saving Member");
+        showErrorPopup(
+            "Error Saving Member"
+        );
 
     }
 
 }
 
 
-/* ==========================
-   SEARCH MEMBER
-========================== */
+// =====================================
+// SEARCH MEMBER
+// =====================================
 
 async function searchMember() {
 
     const memberNumber =
-        document.getElementById("searchMemberNumber")
-        .value
-        .trim();
+        document
+            .getElementById(
+                "searchMemberNumber"
+            )
+            .value
+            .trim();
 
     if (!memberNumber) {
 
-        showErrorPopup("Enter Member Number");
+        showErrorPopup(
+            "Enter Member Number"
+        );
 
         return;
 
     }
 
-    try {
-
-        const response = await fetch(
+    const response =
+        await fetch(
             `${API_BASE_URL}?action=searchMember&memberNumber=${memberNumber}`
         );
 
-        const result = await response.json();
+    const result =
+        await response.json();
 
-        if (result.status !== "success") {
+    if (
+        result.status !== "success"
+    ) {
 
-            showErrorPopup(result.message);
+        showErrorPopup(
+            result.message
+        );
 
-            return;
-
-        }
-
-        const m = result.member;
-
-        document.getElementById("memberNumber").value = m.memberNumber || "";
-        document.getElementById("fullName").value = m.fullName || "";
-        document.getElementById("fatherName").value = m.fatherName || "";
-        document.getElementById("gender").value = m.gender || "";
-
-        if (m.dob) {
-
-            document.getElementById("dob").value =
-                String(m.dob).substring(0, 10);
-
-        }
-
-        document.getElementById("age").value = m.age || "";
-        document.getElementById("mobile").value = m.mobile || "";
-        document.getElementById("alternateMobile").value = m.alternateMobile || "";
-        document.getElementById("email").value = m.email || "";
-        document.getElementById("aadhaar").value = m.aadhaar || "";
-        document.getElementById("pan").value = m.pan || "";
-        document.getElementById("occupation").value = m.occupation || "";
-        document.getElementById("monthlyIncome").value = m.monthlyIncome || "";
-        document.getElementById("address").value = m.address || "";
-        document.getElementById("city").value = m.city || "";
-        document.getElementById("district").value = m.district || "";
-        document.getElementById("state").value = m.state || "";
-        document.getElementById("pinCode").value = m.pinCode || "";
-        document.getElementById("nomineeName").value = m.nomineeName || "";
-        document.getElementById("nomineeRelation").value = m.nomineeRelation || "";
-        document.getElementById("nomineeMobile").value = m.nomineeMobile || "";
-        document.getElementById("status").value = m.status || "Active";
-
-        document.getElementById("saveBtn").innerHTML =
-            "Update Member";
-
-        isUpdateMode = true;
-
-        showLoadedMessage(memberNumber);
-
-    } catch (error) {
-
-        console.error(error);
-
-        showErrorPopup("Error Loading Member");
+        return;
 
     }
 
-}
+    const m =
+        result.member;
 
+    document.getElementById("memberNumber").value = m.memberNumber || "";
+    document.getElementById("fullName").value = m.fullName || "";
+    document.getElementById("fatherName").value = m.fatherName || "";
+    document.getElementById("gender").value = m.gender || "";
+    document.getElementById("mobile").value = m.mobile || "";
+    document.getElementById("alternateMobile").value = m.alternateMobile || "";
+    document.getElementById("email").value = m.email || "";
+    document.getElementById("aadhaar").value = m.aadhaar || "";
+    document.getElementById("pan").value = m.pan || "";
+    document.getElementById("occupation").value = m.occupation || "";
+    document.getElementById("monthlyIncome").value = m.monthlyIncome || "";
+    document.getElementById("address").value = m.address || "";
+    document.getElementById("city").value = m.city || "";
+    document.getElementById("district").value = m.district || "";
+    document.getElementById("state").value = m.state || "";
+    document.getElementById("pinCode").value = m.pinCode || "";
+    document.getElementById("nomineeName").value = m.nomineeName || "";
+    document.getElementById("nomineeRelation").value = m.nomineeRelation || "";
+    document.getElementById("nomineeMobile").value = m.nomineeMobile || "";
+    document.getElementById("status").value = m.status || "Active";
 
-/* ==========================
-   MEMBER LOADED
-========================== */
+    isUpdateMode = true;
 
-function showLoadedMessage(memberNumber) {
+    document.getElementById("saveBtn").innerHTML =
+        "Update Member";
 
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="loadedMsg" style="
-            position:fixed;
-            top:20px;
-            right:20px;
-            background:#00b894;
-            color:white;
-            padding:15px 25px;
-            border-radius:12px;
-            z-index:99999;
-            font-weight:bold;
-        ">
-            ✓ Member Loaded : ${memberNumber}
-        </div>
-        `
-    );
-
-    setTimeout(() => {
-
-        const el =
-            document.getElementById("loadedMsg");
-
-        if (el) el.remove();
-
-    }, 3000);
-
-}
-
-
-/* ==========================
-   SUCCESS POPUP
-========================== */
-
-function showSuccessPopup(message, memberNumber) {
-
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="successPopup" style="
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,.4);
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            z-index:999999;
-        ">
-            <div style="
-                background:#fff;
-                width:420px;
-                padding:35px;
-                border-radius:20px;
-                text-align:center;
-                box-shadow:0 15px 40px rgba(0,0,0,.25);
-            ">
-
-                <div style="
-                    font-size:70px;
-                    color:#00b894;
-                ">
-                    ✔
-                </div>
-
-                <h2>${message}</h2>
-
-                <p style="margin-top:10px;">
-                    Member Number
-                </p>
-
-                <h1 style="
-                    color:#0984e3;
-                    margin:15px 0;
-                ">
-                    ${memberNumber}
-                </h1>
-
-                <button onclick="closeSuccessPopup()">
-                    OK
-                </button>
-
-            </div>
-        </div>
-        `
+    showLoadedMessage(
+        memberNumber
     );
 
 }
 
-function closeSuccessPopup() {
 
-    location.reload();
-
-}
-
-
-/* ==========================
-   ERROR POPUP
-========================== */
-
-function showErrorPopup(message) {
-
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="errorPopup" style="
-            position:fixed;
-            top:20px;
-            right:20px;
-            background:#e74c3c;
-            color:white;
-            padding:15px 25px;
-            border-radius:12px;
-            z-index:99999;
-            font-weight:bold;
-        ">
-            ✖ ${message}
-        </div>
-        `
-    );
-
-    setTimeout(() => {
-
-        const popup =
-            document.getElementById("errorPopup");
-
-        if (popup) popup.remove();
-
-    }, 3000);
-
-}
-
-
-/* ==========================
-   LOADING
-========================== */
-
-function showLoading() {
-
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div id="loadingPopup" style="
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(255,255,255,.75);
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            z-index:999999;
-        ">
-            <div style="
-                background:white;
-                padding:30px;
-                border-radius:16px;
-                box-shadow:0 10px 25px rgba(0,0,0,.15);
-            ">
-                <h2>Please Wait...</h2>
-            </div>
-        </div>
-        `
-    );
-
-}
-
-function hideLoading() {
-
-    const popup =
-        document.getElementById("loadingPopup");
-
-    if (popup) {
-
-        popup.remove();
-
-    }
-
-}
+// =====================================
+// EXISTING POPUP FUNCTIONS
+// KEEP YOUR OLD:
+// showLoadedMessage()
+// showSuccessPopup()
+// closeSuccessPopup()
+// showErrorPopup()
+// showLoading()
+// hideLoading()
+// =====================================
