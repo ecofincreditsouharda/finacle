@@ -410,6 +410,181 @@ async function searchMember() {
     );
 
 }
+// =====================================
+// MEMBER LOADED MESSAGE
+// =====================================
+
+function showLoadedMessage(memberNumber) {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="loadedMsg" style="
+            position:fixed;
+            top:20px;
+            right:20px;
+            background:#00b894;
+            color:white;
+            padding:15px 25px;
+            border-radius:12px;
+            z-index:99999;
+            font-weight:bold;
+        ">
+            ✓ Member Loaded : ${memberNumber}
+        </div>
+        `
+    );
+
+    setTimeout(() => {
+
+        const el =
+            document.getElementById("loadedMsg");
+
+        if (el) el.remove();
+
+    }, 3000);
+
+}
+
+
+// =====================================
+// SUCCESS POPUP
+// =====================================
+
+function showSuccessPopup(message, memberNumber) {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="successPopup" style="
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,.4);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index:999999;
+        ">
+            <div style="
+                background:#fff;
+                width:420px;
+                padding:35px;
+                border-radius:20px;
+                text-align:center;
+            ">
+                <h2>${message}</h2>
+
+                <h1 style="
+                    color:#0984e3;
+                    margin:15px 0;
+                ">
+                    ${memberNumber}
+                </h1>
+
+                <button onclick="closeSuccessPopup()">
+                    OK
+                </button>
+
+            </div>
+        </div>
+        `
+    );
+
+}
+
+function closeSuccessPopup() {
+
+    location.reload();
+
+}
+
+
+// =====================================
+// ERROR POPUP
+// =====================================
+
+function showErrorPopup(message) {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="errorPopup" style="
+            position:fixed;
+            top:20px;
+            right:20px;
+            background:#e74c3c;
+            color:white;
+            padding:15px 25px;
+            border-radius:12px;
+            z-index:99999;
+            font-weight:bold;
+        ">
+            ✖ ${message}
+        </div>
+        `
+    );
+
+    setTimeout(() => {
+
+        const popup =
+            document.getElementById("errorPopup");
+
+        if (popup) popup.remove();
+
+    }, 3000);
+
+}
+
+
+// =====================================
+// LOADING
+// =====================================
+
+function showLoading() {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="loadingPopup" style="
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(255,255,255,.8);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index:999999;
+        ">
+            <div style="
+                background:white;
+                padding:30px;
+                border-radius:16px;
+            ">
+                <h2>Please Wait...</h2>
+            </div>
+        </div>
+        `
+    );
+
+}
+
+function hideLoading() {
+
+    const popup =
+        document.getElementById("loadingPopup");
+
+    if (popup) {
+
+        popup.remove();
+
+    }
+
+}
 
 
 // =====================================
