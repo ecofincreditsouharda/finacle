@@ -1,193 +1,239 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECOFIN CREDIT SOUHARDA CO-OP LTD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f08080; /* Light Coral */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        .login-container {
+            display: flex;
+            width: 900px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
 
-<title>ECOFIN CREDIT SOUHARDA CO-OP LTD</title>
+        /* Left Side - Logo & Branding */
+        .left-panel {
+            background: #003366;
+            color: white;
+            width: 45%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
 
-<link rel="stylesheet" href="css/style.css">
+        .left-panel img {
+            width: 180px;
+            margin-bottom: 20px;
+        }
 
-<style>
+        .left-panel h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
 
-body{
-margin:0;
-padding:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
+        .left-panel p {
+            margin: 0;
+            opacity: 0.9;
+        }
 
-.login-box{
-width:420px;
-background:#fff;
-padding:40px;
-border-radius:15px;
-box-shadow:0 0 20px rgba(0,0,0,.15);
-}
+        /* Right Side - Login Form */
+        .right-panel {
+            width: 55%;
+            padding: 50px 40px;
+        }
 
-.logo{
-text-align:center;
-margin-bottom:20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.logo h1{
-margin:0;
-color:#003366;
-}
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
 
-.logo p{
-margin:5px 0;
-color:#777;
-}
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
 
-.form-group{
-margin-bottom:15px;
-}
+        .password-container {
+            position: relative;
+        }
 
-label{
-display:block;
-margin-bottom:5px;
-font-weight:bold;
-}
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
 
-input{
-width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-}
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #003366;
+            color: white;
+            font-size: 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-button{
-width:100%;
-padding:14px;
-border:none;
-background:#003366;
-color:white;
-font-size:16px;
-border-radius:8px;
-cursor:pointer;
-}
+        button:hover {
+            background: #004c99;
+        }
 
-button:hover{
-background:#004c99;
-}
+        #error {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 20px;
+        }
 
-#error{
-color:red;
-margin-top:15px;
-text-align:center;
-}
-
-</style>
-
+        #current-time {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="login-box">
+    <div class="login-container">
+        <!-- Left Panel - Logo -->
+        <div class="left-panel">
+            <img src="assets/logo.png" alt="ECOFIN Logo">
+            <h1>ECOFIN CREDIT</h1>
+            <p>Souharda Co-op Ltd</p>
+            <p>Finacle by Arambh</p>
+        </div>
 
-<div class="logo">
+        <!-- Right Panel - Login Form -->
+        <div class="right-panel">
+            <h2 style="text-align:center; margin-bottom:30px; color:#003366;">Welcome Back</h2>
+            
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
 
-<h1>ECOFIN CREDIT</h1>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Enter password">
+                    <span class="toggle-password" id="togglePassword">👁️</span>
+                </div>
+            </div>
 
-<p>Finacle by Arambh</p>
+            <button onclick="login()">Login</button>
+            <div id="error"></div>
 
-</div>
+            <div id="current-time"></div>
+        </div>
+    </div>
 
-<div class="form-group">
+    <script src="js/config.js"></script>
+    <script>
+        // Show Current Time
+        function updateTime() {
+            const timeElement = document.getElementById("current-time");
+            setInterval(() => {
+                const now = new Date();
+                timeElement.textContent = now.toLocaleString('en-IN', { 
+                    dateStyle: 'medium', 
+                    timeStyle: 'short' 
+                });
+            }, 1000);
+        }
+        updateTime();
 
-<label>Username</label>
+        // Password Visibility Toggle
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.textContent = "🙈";
+            } else {
+                passwordField.type = "password";
+                this.textContent = "👁️";
+            }
+        });
 
-<input
-type="text"
-id="username">
+        // Login Function
+        async function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorDiv = document.getElementById("error");
 
-</div>
+            errorDiv.innerHTML = "";
 
-<div class="form-group">
+            if (!username || !password) {
+                errorDiv.innerHTML = "Please enter Username and Password";
+                return;
+            }
 
-<label>Password</label>
+            try {
+                const url = `${API_BASE_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                
+                const response = await fetch(url);
+                const result = await response.json();
 
-<input
-type="password"
-id="password">
+                if (result.status === "success") {
+                    // Save user data
+                    localStorage.setItem("user", JSON.stringify(result.user));
 
-</div>
+                    // Show success message
+                    errorDiv.style.color = "green";
+                    errorDiv.innerHTML = "✅ Login Successful! Redirecting...";
 
-<button onclick="login()">
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1200);
+                } else {
+                    errorDiv.style.color = "red";
+                    errorDiv.innerHTML = result.message || "Invalid Username or Password";
+                }
+            } catch (err) {
+                console.error(err);
+                errorDiv.style.color = "red";
+                errorDiv.innerHTML = "Network error. Please try again.";
+            }
+        }
 
-Login
-
-</button>
-
-<div id="error"></div>
-
-</div>
-
-<script src="js/config.js"></script>
-
-<script>
-
-async function login(){
-
-const username =
-document.getElementById("username").value;
-
-const password =
-document.getElementById("password").value;
-
-if(!username || !password){
-
-document.getElementById("error").innerHTML =
-"Enter Username and Password";
-
-return;
-
-}
-
-const url =
-API_BASE_URL +
-"?action=login" +
-"&username=" +
-encodeURIComponent(username) +
-"&password=" +
-encodeURIComponent(password);
-
-const response =
-await fetch(url);
-
-const result =
-await response.json();
-
-if(result.status==="success"){
-
-localStorage.setItem(
-"user",
-JSON.stringify(result.user)
-);
-
-window.location.href =
-"dashboard.html";
-
-}
-else{
-
-document.getElementById("error").innerHTML =
-result.message;
-
-}
-
-}
-
-</script>
-
+        // Allow pressing Enter to login
+        document.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") login();
+        });
+    </script>
 </body>
-
 </html>
