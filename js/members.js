@@ -20,7 +20,7 @@ window.onload = async function () {
 };
 
 // =====================================
-// SAVE / UPDATE MEMBER (CORS FIXED)
+// SAVE / UPDATE MEMBER
 // =====================================
 async function saveMember() {
     try {
@@ -60,7 +60,7 @@ async function saveMember() {
         const response = await fetch(API_BASE_URL, {
             method: "POST",
             headers: {
-                "Content-Type": "text/plain;charset=utf-8"   // Important for Google Apps Script CORS
+                "Content-Type": "text/plain;charset=utf-8"
             },
             body: JSON.stringify({
                 action: action,
@@ -72,7 +72,7 @@ async function saveMember() {
         hideLoading();
 
         if (result.status === "success") {
-            showSuccessPopup(
+            showSuccessModal(
                 isUpdateMode ? "Member Updated Successfully" : "Member Saved Successfully",
                 result.memberNumber || memberData.memberNumber
             );
@@ -110,6 +110,7 @@ async function searchMember() {
 
         const m = result.member;
 
+        // Populate form
         document.getElementById("memberNumber").value = m.memberNumber || "";
         document.getElementById("fullName").value = m.fullName || "";
         document.getElementById("fatherName").value = m.fatherName || "";
@@ -140,7 +141,6 @@ async function searchMember() {
         isUpdateMode = true;
         document.getElementById("saveBtn").innerHTML = "Update Member";
 
-        showLoadedMessage(memberNumber);
     } catch (error) {
         console.error("Search Error:", error);
         showErrorPopup("Error searching member");
@@ -148,24 +148,64 @@ async function searchMember() {
 }
 
 // =====================================
-// POPUP & LOADING FUNCTIONS
+// CLEAN SUCCESS MODAL
 // =====================================
-function showLoadedMessage(memberNumber) {
-    alert("Member Loaded: " + memberNumber);
+function showSuccessModal(title, memberNumber) {
+    // Create modal if not exists
+    let modal = document.getElementById("successModal");
+    if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "successModal";
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: flex; align-items: center;
+            justify-content: center; z-index: 9999; font-family: Arial, sans-serif;
+        `;
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <h2 style="color: #28a745; margin-bottom: 10px;">✅ Success</h2>
+                <p id="modalTitle" style="font-size: 18px; margin: 15px 0;"></p>
+                <p style="font-size: 16px; color: #333; margin: 10px 0;">
+                    Member Number: <strong id="modalMemberNumber"></strong>
+                </p>
+                <button onclick="closeModal()" 
+                        style="background: #28a745; color: white; border: none; padding: 12px 30px; 
+                               border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 20px;">
+                    OK
+                </button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalMemberNumber").textContent = memberNumber;
+    modal.style.display = "flex";
+
+    // Auto refresh after closing
+    setTimeout(() => {
+        closeModal = () => {
+            modal.style.display = "none";
+            location.reload();
+        };
+    }, 100);
 }
 
-function showSuccessPopup(message, memberNumber) {
-    alert(message + "\n\nMember Number: " + memberNumber);
-    location.reload();   // Refresh to get new member number
+function closeModal() {
+    const modal = document.getElementById("successModal");
+    if (modal) modal.style.display = "none";
+    location.reload();
 }
 
+// =====================================
+// ERROR POPUP (kept simple for now)
+// =====================================
 function showErrorPopup(message) {
-    alert(message);
+    alert(message);   // You can also convert this to modal later
 }
 
 function showLoading() {
     console.log("Loading...");
-    // You can add a loading spinner here later
 }
 
 function hideLoading() {
