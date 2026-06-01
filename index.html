@@ -41,18 +41,22 @@
         }
 
         .left-panel img {
-            width: 180px;
-            margin-bottom: 20px;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 15px;
+            border-radius: 8px;
         }
 
         .left-panel h1 {
-            margin: 0 0 10px 0;
-            font-size: 28px;
+            margin: 8px 0 5px 0;
+            font-size: 26px;
+            font-weight: bold;
         }
 
-        .left-panel p {
-            margin: 0;
-            opacity: 0.9;
+        .left-panel .subtitle {
+            margin: 5px 0 20px 0;
+            font-size: 15px;
+            opacity: 0.95;
         }
 
         /* Right Side - Login Form */
@@ -120,7 +124,7 @@
 
         #current-time {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 14px;
             color: #555;
         }
@@ -129,15 +133,14 @@
 <body>
 
     <div class="login-container">
-        <!-- Left Panel - Logo -->
+        <!-- Left Panel -->
         <div class="left-panel">
-            <img src="assets/logo.png" alt="ECOFIN Logo">
-            <h1>ECOFIN CREDIT</h1>
-            <p>Souharda Co-op Ltd</p>
-            <p>Finacle by Arambh</p>
+            <img src="assets/logo.png" alt="ECOFIN Logo" onerror="this.style.display='none';">
+            <h1>ECOFIN CREDIT SOUHARDA CO-OP LTD</h1>
+            <p class="subtitle">Finacle by Arambh</p>
         </div>
 
-        <!-- Right Panel - Login Form -->
+        <!-- Right Panel -->
         <div class="right-panel">
             <h2 style="text-align:center; margin-bottom:30px; color:#003366;">Welcome Back</h2>
             
@@ -163,7 +166,7 @@
 
     <script src="js/config.js"></script>
     <script>
-        // Show Current Time
+        // Update Time
         function updateTime() {
             const timeElement = document.getElementById("current-time");
             setInterval(() => {
@@ -176,14 +179,14 @@
         }
         updateTime();
 
-        // Password Visibility Toggle
+        // Password Toggle
         document.getElementById("togglePassword").addEventListener("click", function () {
-            const passwordField = document.getElementById("password");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
+            const pwd = document.getElementById("password");
+            if (pwd.type === "password") {
+                pwd.type = "text";
                 this.textContent = "🙈";
             } else {
-                passwordField.type = "password";
+                pwd.type = "password";
                 this.textContent = "👁️";
             }
         });
@@ -208,20 +211,17 @@
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    // Save user data
                     localStorage.setItem("user", JSON.stringify(result.user));
-
-                    // Show success message
+                    
                     errorDiv.style.color = "green";
                     errorDiv.innerHTML = "✅ Login Successful! Redirecting...";
 
-                    // Redirect after short delay
                     setTimeout(() => {
                         window.location.href = "dashboard.html";
                     }, 1200);
                 } else {
                     errorDiv.style.color = "red";
-                    errorDiv.innerHTML = result.message || "Invalid Username or Password";
+                    errorDiv.innerHTML = result.message || "Invalid credentials";
                 }
             } catch (err) {
                 console.error(err);
@@ -230,8 +230,8 @@
             }
         }
 
-        // Allow pressing Enter to login
-        document.addEventListener("keypress", function(e) {
+        // Enter key support
+        document.addEventListener("keypress", (e) => {
             if (e.key === "Enter") login();
         });
     </script>
