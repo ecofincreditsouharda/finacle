@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<title>Savings Accounts</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+
+.container{
+padding:20px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+input,select{
+padding:10px;
+width:100%;
+}
+
+button{
+padding:10px 20px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>
+<span class="main-title">ECOFIN CREDIT</span>
+<span class="sub-title">Finacle by Arambh</span>
+</h2>
+
+<a href="../dashboard.html">Dashboard</a>
+<a href="members.html">Members</a>
+<a href="savings.html">Savings Accounts</a>
+
+</div>
+
+<div class="main">
+
+<h1>Savings Deposit</h1>
+
+<div class="container">
+
+<div class="form-grid">
+
+<input type="text" id="memberNumber" placeholder="Member Number">
+
+<input type="number" id="amount" placeholder="Deposit Amount">
+
+<select id="paymentMode">
+
+<option>Cash</option>
+<option>Bank Transfer</option>
+<option>UPI</option>
+<option>Cheque</option>
+
+</select>
+
+<input type="text" id="remarks" placeholder="Remarks">
+
+</div>
+
+<br>
+
+<button onclick="depositSavings()">
+
+Deposit
+
+</button>
+
+<div id="result"></div>
+
+</div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/savings.js"></script>
+
+</body>
+</html>
