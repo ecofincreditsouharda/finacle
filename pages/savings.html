@@ -28,15 +28,10 @@
     button:disabled {
       background-color: #6c757d;
     }
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
+    #memberNameDisplay {
+      margin-top: 5px;
+      font-weight: bold;
+      color: #28a745;
     }
     #result {
       margin-top: 20px;
@@ -63,7 +58,10 @@
     <h1>Savings Deposit</h1>
     <div class="container">
       <div class="form-grid">
-        <input type="text" id="memberNumber" placeholder="Member Number (e.g. ECO00001)">
+        <div>
+          <input type="text" id="memberNumber" placeholder="Member Number (e.g. ECO00001)" onblur="fetchMemberName()">
+          <div id="memberNameDisplay"></div>
+        </div>
         <input type="number" id="amount" placeholder="Deposit Amount">
         <select id="paymentMode">
           <option value="Cash">Cash</option>
