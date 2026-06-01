@@ -1,13 +1,193 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=dashboard.html">
-    <title>ECOFIN CREDIT</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ECOFIN CREDIT SOUHARDA CO-OP LTD</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+body{
+margin:0;
+padding:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.login-box{
+width:420px;
+background:#fff;
+padding:40px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,.15);
+}
+
+.logo{
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo h1{
+margin:0;
+color:#003366;
+}
+
+.logo p{
+margin:5px 0;
+color:#777;
+}
+
+.form-group{
+margin-bottom:15px;
+}
+
+label{
+display:block;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+background:#003366;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#004c99;
+}
+
+#error{
+color:red;
+margin-top:15px;
+text-align:center;
+}
+
+</style>
+
 </head>
+
 <body>
 
-    Redirecting...
+<div class="login-box">
+
+<div class="logo">
+
+<h1>ECOFIN CREDIT</h1>
+
+<p>Finacle by Arambh</p>
+
+</div>
+
+<div class="form-group">
+
+<label>Username</label>
+
+<input
+type="text"
+id="username">
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password">
+
+</div>
+
+<button onclick="login()">
+
+Login
+
+</button>
+
+<div id="error"></div>
+
+</div>
+
+<script src="js/config.js"></script>
+
+<script>
+
+async function login(){
+
+const username =
+document.getElementById("username").value;
+
+const password =
+document.getElementById("password").value;
+
+if(!username || !password){
+
+document.getElementById("error").innerHTML =
+"Enter Username and Password";
+
+return;
+
+}
+
+const url =
+API_BASE_URL +
+"?action=login" +
+"&username=" +
+encodeURIComponent(username) +
+"&password=" +
+encodeURIComponent(password);
+
+const response =
+await fetch(url);
+
+const result =
+await response.json();
+
+if(result.status==="success"){
+
+localStorage.setItem(
+"user",
+JSON.stringify(result.user)
+);
+
+window.location.href =
+"dashboard.html";
+
+}
+else{
+
+document.getElementById("error").innerHTML =
+result.message;
+
+}
+
+}
+
+</script>
 
 </body>
+
 </html>
