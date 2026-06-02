@@ -1,5 +1,3 @@
-// savings.js
-
 let currentMemberName = "";
 
 async function fetchMemberName() {
@@ -13,19 +11,18 @@ async function fetchMemberName() {
   }
 
   try {
-    const response = await fetch(API_BASE_URL + "?action=getMemberName&memberNumber=" + encodeURIComponent(memberNumber));
+    const response = await fetch(`${API_BASE_URL}?action=getMemberName&memberNumber=${encodeURIComponent(memberNumber)}`);
     const result = await response.json();
 
     if (result.status === "success") {
       currentMemberName = result.memberName;
-      nameDisplay.innerHTML = `Member Name: <span style="color:#28a745">${result.memberName}</span>`;
+      nameDisplay.innerHTML = `✅ <strong>${result.memberName}</strong>`;
     } else {
       nameDisplay.innerHTML = `<span style="color:red">Member not found</span>`;
       currentMemberName = "";
     }
   } catch (err) {
-    console.error(err);
-    nameDisplay.innerHTML = `<span style="color:red">Error fetching member</span>`;
+    nameDisplay.innerHTML = `<span style="color:red">Error loading name</span>`;
   }
 }
 
@@ -35,64 +32,39 @@ async function depositSavings() {
   const paymentMode = document.getElementById("paymentMode").value;
   const remarks = document.getElementById("remarks").value.trim();
 
-  if (!memberNumber) {
-    alert("Please enter Member Number");
+  if (!memberNumber || !currentMemberName) {
+    alert("Please enter valid Member Number");
     return;
   }
   if (!amount || amount <= 0) {
-    alert("Please enter a valid deposit amount");
+    alert("Please enter valid amount");
     return;
   }
-  if (!currentMemberName) {
-    alert("Please enter a valid Member Number first");
-    return;
-  }
-
-  const btn = document.querySelector("button");
-  const originalBtnText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "Processing...";
-
-  const resultDiv = document.getElementById("result");
 
   try {
     const response = await fetch(API_BASE_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         action: "depositSavings",
-        data: {
-          memberNumber: memberNumber,
-          amount: amount,
-          paymentMode: paymentMode,
-          remarks: remarks
-        }
+        data: { memberNumber, amount, paymentMode, remarks }
       })
     });
 
     const result = await response.json();
-
     if (result.status === "success") {
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
         <strong>${result.message}</strong><br><br>
-        <b>Member:</b> ${currentMemberName}<br>
-        <b>New Balance:</b> ₹${result.balance.toLocaleString('en-IN')}<br>
-        <b>Transaction ID:</b> ${result.transactionID}
+        Member: <b>${currentMemberName}</b><br>
+        New Balance: <b>₹${result.balance.toLocaleString('en-IN')}</b><br>
+        Transaction ID: <b>${result.transactionID}</b>
       `;
-
-      // Clear form
-      document.getElementById("amount").value = "";
-      document.getElementById("remarks").value = "";
       alert(result.message);
     } else {
-      alert(result.message || "Deposit Failed");
+      alert(result.message);
     }
   } catch (err) {
-    console.error(err);
     alert("Server error. Please try again.");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = originalBtnText;
   }
 }
