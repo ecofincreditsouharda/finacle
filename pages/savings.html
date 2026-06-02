@@ -4,76 +4,71 @@
   <title>Savings Accounts - ECOFIN</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    .container { padding: 20px; }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
+    .container { padding: 20px; max-width: 800px; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; }
     input, select {
-      padding: 10px;
+      padding: 12px;
       width: 100%;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 16px;
     }
     button {
-      padding: 12px 25px;
-      cursor: pointer;
+      padding: 14px 30px;
       background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    button:disabled {
-      background-color: #6c757d;
+      border-radius: 6px;
+      font-size: 17px;
+      cursor: pointer;
     }
     #memberNameDisplay {
-      margin-top: 5px;
+      margin-top: 8px;
+      font-size: 16px;
       font-weight: bold;
-      color: #28a745;
+      min-height: 24px;
     }
     #result {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #d4edda;
+      margin-top: 25px;
+      padding: 20px;
+      background: #d4edda;
       border: 1px solid #c3e6cb;
-      border-radius: 4px;
+      border-radius: 8px;
       display: none;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>
-      <span class="main-title">ECOFIN CREDIT</span>
-      <span class="sub-title">Finacle by Arambh</span>
-    </h2>
-    <a href="../dashboard.html">Dashboard</a>
-    <a href="members.html">Members</a>
-    <a href="savings.html">Savings Accounts</a>
-  </div>
-
+  <div class="sidebar"> <!-- your existing sidebar --> </div>
   <div class="main">
-    <h1>Savings Deposit</h1>
+    <h1>Savings Accounts</h1>
+    
     <div class="container">
-      <div class="form-grid">
-        <div>
-          <input type="text" id="memberNumber" placeholder="Member Number (e.g. ECO00001)" onblur="fetchMemberName()">
-          <div id="memberNameDisplay"></div>
-        </div>
-        <input type="number" id="amount" placeholder="Deposit Amount">
+      <h2>Deposit</h2>
+      <div class="form-group">
+        <label>Member Number</label>
+        <input type="text" id="memberNumber" placeholder="ECO00001" onblur="fetchMemberName()">
+        <div id="memberNameDisplay"></div>
+      </div>
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+      </div>
+      <div class="form-group">
+        <label>Payment Mode</label>
         <select id="paymentMode">
           <option value="Cash">Cash</option>
-          <option value="Bank Transfer">Bank Transfer</option>
           <option value="UPI">UPI</option>
+          <option value="Bank Transfer">Bank Transfer</option>
           <option value="Cheque">Cheque</option>
         </select>
-        <input type="text" id="remarks" placeholder="Remarks (Optional)">
       </div>
-      <br>
+      <div class="form-group">
+        <label>Remarks</label>
+        <input type="text" id="remarks" placeholder="Optional remarks">
+      </div>
       <button onclick="depositSavings()">Deposit Now</button>
-      
       <div id="result"></div>
     </div>
   </div>
